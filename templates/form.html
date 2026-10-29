@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ titulo_pagina }} | Catálogo de Filmes{% endblock %}
+
+{% block conteudo %}
+<section>
+    <span class="etiqueta">MINHA COLEÇÃO</span>
+    <h1>{{ titulo_pagina }}</h1>
+    <p class="subtitulo">Preencha os dados abaixo. A nota deve ser um número de 1 a 10.</p>
+</section>
+
+<form class="form-card" method="POST">
+    <div class="campo">
+        <label for="titulo">Título do filme</label>
+        <input type="text" id="titulo" name="titulo" maxlength="150" required
+               placeholder="Ex.: Interestelar"
+               value="{{ filme['titulo'] if filme else '' }}">
+    </div>
+
+    <div class="campo">
+        <label for="genero">Gênero</label>
+        <select id="genero" name="genero" required>
+            <option value="">Selecione um gênero</option>
+            {% for opcao in ['Ação', 'Aventura', 'Animação', 'Comédia', 'Documentário', 'Drama', 'Fantasia', 'Ficção científica', 'Romance', 'Suspense', 'Terror', 'Outro'] %}
+                <option value="{{ opcao }}" {% if filme and filme['genero'] == opcao %}selected{% endif %}>{{ opcao }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="campo">
+        <label for="ano">Ano de lançamento</label>
+        <input type="number" id="ano" name="ano" min="1888" max="2100" required
+               placeholder="Ex.: 2014"
+               value="{{ filme['ano'] if filme else '' }}">
+    </div>
+
+    <div class="campo">
+        <label for="nota">Nota (1 a 10)</label>
+        <input type="number" id="nota" name="nota" min="1" max="10" step="0.1" required
+               placeholder="Ex.: 9.5"
+               value="{{ filme['nota'] if filme else '' }}">
+        <div class="ajuda">Você pode usar notas decimais, como 8.5.</div>
+    </div>
+
+    <div class="botoes-form">
+        <button class="botao primario" type="submit">Salvar filme</button>
+        <a class="botao secundario" href="{{ url_for('index') }}">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

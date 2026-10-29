@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block titulo %}Catálogo de Filmes | Início{% endblock %}
+
+{% block conteudo %}
+<section>
+    <span class="etiqueta">SUA PRÓXIMA HISTÓRIA COMEÇA AQUI</span>
+    <h1>Seu universo de<br>filmes, organizado.</h1>
+    <p class="subtitulo">Cadastre seus filmes favoritos, dê notas e mantenha tudo em um só lugar. Um catálogo simples para organizar o que você já assistiu ou quer assistir.</p>
+</section>
+
+<section>
+    <div class="cabecalho-lista">
+        <div>
+            <h2>Minha coleção</h2>
+            <div class="muted">{{ filmes|length }} filme(s) cadastrado(s)</div>
+        </div>
+        <a class="botao primario" href="{{ url_for('novo_filme') }}">＋ Cadastrar filme</a>
+    </div>
+
+    {% if filmes %}
+        <div class="grade">
+            {% for filme in filmes %}
+                <article class="filme">
+                    <div class="filme-topo">
+                        <h3>{{ filme['titulo'] }}</h3>
+                        <span class="nota">★ {{ "%.1f"|format(filme['nota']) }}</span>
+                    </div>
+                    <span class="genero">{{ filme['genero'] }}</span>
+                    <p class="ano">Lançamento: {{ filme['ano'] }}</p>
+                    <div class="acoes">
+                        <a class="botao secundario" href="{{ url_for('editar_filme', id=filme['id']) }}">✎ Editar</a>
+                        <form action="{{ url_for('excluir_filme', id=filme['id']) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este filme?');">
+                            <button class="botao perigo" type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="vazio">
+            <div class="icone">🎬</div>
+            <h3>Sua coleção começa agora</h3>
+            <p>Você ainda não cadastrou nenhum filme. Adicione o primeiro para começar!</p>
+            <a class="botao primario" href="{{ url_for('novo_filme') }}">＋ Adicionar primeiro filme</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
